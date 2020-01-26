@@ -7,6 +7,10 @@ on:
         branches:
             - master
             - features/*
+    pull_request:
+        branches:
+            - master
+            - features/*
 
 # list of jobs to be executed.
 # jobs by default are executed in parallel
@@ -51,11 +55,6 @@ jobs:
                 run: |
                     php -r "file_exists('.env') || copy('.env.ci', '.env');"
 
-#            -   name: Set Symfony ENV to test
-#                working-directory: ./app
-#                run: |
-#                    export APP_ENV=test
-
 #           -   name: Build the docker-compose stack
                   ##                run: docker-compose -f docker-compose.yml up -d
                   ##
@@ -88,6 +87,7 @@ jobs:
 #            -   name: Create DB schema
 #                working-directory: ./app
 #                run: |
+#                    php bin/console doctrine:database:create
 #                    php bin/console doctrine:schema:update -f
 
             -   name: Run migrations
@@ -105,24 +105,24 @@ jobs:
                     php bin/phpunit
 
 
-#    phpstan:
-#        name: PHPStan
-#        runs-on: ubuntu-latest
-#        steps:
-#            -   uses: actions/checkout@master
-#            -   name: Run PHPStan
-#                uses: docker://jakzal/phpqa:php7.3-alpine
-#                working-directory: ./app
-#                with:
-#                    args: phpstan analyze
-#
-#    php-cs-fixer:
-#        name: PHP-CS-Fixer
-#        runs-on: ubuntu-latest
-#        steps:
-#            -   uses: actions/checkout@master
-#            -   name: Run PHP-CS-Fixer
-#                working-directory: ./app
-#                uses: docker://jakzal/phpqa:php7.3-alpine
-#                with:
-#                    args: php-cs-fixer fix --dry-run --diff-format udiff -vvv
+
+    phpstan:
+        name: PHPStan
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@master
+            -   name: Run PHPStan
+                uses: docker://jakzal/phpqa:php7.3-alpine
+                with:
+                    args: phpstan analyze ./app/src
+
+    php-cs-fixer:
+        name: PHP-CS-Fixer
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@master
+            -   name: Run PHP-CS-Fixer
+                working-directory: ./app
+                uses: docker://jakzal/phpqa:php7.3-alpine
+                with:
+                    args: php-cs-fixer fix ./app --dry-run --diff-format udiff -vvv
