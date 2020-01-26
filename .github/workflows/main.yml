@@ -14,6 +14,17 @@ jobs:
     build:
         # the name of the image of the virtual machine to be used
         runs-on: ubuntu-latest
+        services:
+            mysql:
+                image: mysql:5.7
+                env:
+                    MYSQL_ROOT_PASSWORD: root
+#                    MYSQL_DATABASE: sf5_test_db
+#                    MYSQL_USER:
+#                    MYSQL_PASSWORD:
+                ports:
+                    - 3306
+                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 #        env:
 #            APP_ENV: ${{ APP_ENV }}
 #            PHP_VERSION: ${{ PHP_VERSION }}
@@ -29,9 +40,14 @@ jobs:
         steps:
             -   uses: actions/checkout@v1
 
-            - name: Copy ENV Symfony Configuration for CI
-              run: |
-                php -r "file_exists('.env') || copy('.env.ci', '.env');"
+            -   name: Verify MYSQL connection is up
+                run: |
+                    sudo apt-get install -y mysql-client
+                    mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports['3306'] }} -uroot -ppassword -e "SHOW DATABASES"
+
+            -   name: Copy ENV Symfony Configuration for CI
+                run: |
+                    php -r "file_exists('.env') || copy('.env.ci', '.env');"
 
 #           -   name: Build the docker-compose stack
                   ##                run: docker-compose -f docker-compose.yml up -d
