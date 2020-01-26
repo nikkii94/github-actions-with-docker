@@ -106,22 +106,36 @@ jobs:
 
 
 
-    phpstan:
-        name: PHPStan
-        runs-on: ubuntu-latest
-        steps:
-            -   uses: actions/checkout@master
-            -   name: Run PHPStan
-                uses: docker://jakzal/phpqa:php7.3-alpine
-                with:
-                    args: phpstan analyze ./app/src
-
-    php-cs-fixer:
-        name: PHP-CS-Fixer
-        runs-on: ubuntu-latest
-        steps:
-            -   uses: actions/checkout@master
-            -   name: Run PHP-CS-Fixer
-                uses: docker://jakzal/phpqa:php7.3-alpine
-                with:
-                    args: php-cs-fixer fix ./app --dry-run --diff-format udiff -vvv
+#    phpstan:
+#        name: PHPStan
+#        runs-on: ubuntu-latest
+#        steps:
+#            -   uses: actions/checkout@master
+#
+#            -   name: Run PHPStan
+#                uses: docker://jakzal/phpqa:php7.3-alpine
+#                with:
+#                    args: phpstan analyze app/src
+#
+#    php-cs-fixer:
+#        name: PHP-CS-Fixer
+#        runs-on: ubuntu-latest
+#        steps:
+#            -   uses: actions/checkout@master
+#
+#            -   name: Run PHP-CS-Fixer
+#                uses: docker://jakzal/phpqa:php7.3-alpine
+#                with:
+#                    args: php-cs-fixer fix ./app --dry-run --diff-format udiff -vvv
+#
+#    psalm:
+#        name: Psalm
+#        runs-on: ubuntu-latest
+#        steps:
+#            -   uses: actions/checkout@master
+#
+#            -   name: Run Psalm
+#                uses: docker://mickaelandrieu/psalm-ga
+##                secrets: ["GITHUB_TOKEN"]
+#                with:
+#                    args: --find-dead-code --threads=8 --diff --diff-methods
