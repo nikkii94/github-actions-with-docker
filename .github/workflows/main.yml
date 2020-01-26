@@ -88,7 +88,6 @@ jobs:
             -   name: Create DB schema
                 working-directory: ./app
                 run: |
-#                    php bin/console doctrine:database:create
                     php bin/console doctrine:schema:update -f
 
             -   name: Run migrations
