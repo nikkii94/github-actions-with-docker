@@ -46,24 +46,24 @@ jobs:
                   php bin/phpunit
 
 
-    phpstan:
-        name: PHPStan
-        runs-on: ubuntu-latest
-        steps:
-            -   uses: actions/checkout@master
-            -   name: Run PHPStan
-                uses: docker://jakzal/phpqa:php7.3-alpine
-                working-directory: ./app
-                with:
-                    args: phpstan analyze
-
-    php-cs-fixer:
-        name: PHP-CS-Fixer
-        runs-on: ubuntu-latest
-        steps:
-            -   uses: actions/checkout@master
-            -   name: Run PHP-CS-Fixer
-                working-directory: ./app
-                uses: docker://jakzal/phpqa:php7.3-alpine
-                with:
-                    args: php-cs-fixer fix --dry-run --diff-format udiff -vvv
+#    phpstan:
+#        name: PHPStan
+#        runs-on: ubuntu-latest
+#        steps:
+#            -   uses: actions/checkout@master
+#            -   name: Run PHPStan
+#                uses: docker://jakzal/phpqa:php7.3-alpine
+#                working-directory: ./app
+#                with:
+#                    args: phpstan analyze
+#
+#    php-cs-fixer:
+#        name: PHP-CS-Fixer
+#        runs-on: ubuntu-latest
+#        steps:
+#            -   uses: actions/checkout@master
+#            -   name: Run PHP-CS-Fixer
+#                working-directory: ./app
+#                uses: docker://jakzal/phpqa:php7.3-alpine
+#                with:
+#                    args: php-cs-fixer fix --dry-run --diff-format udiff -vvv
