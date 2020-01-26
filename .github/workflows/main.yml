@@ -85,15 +85,19 @@ jobs:
                 run: |
                     php bin/console secrets:generate-keys
 
-            -   name: Create DB schema
-                working-directory: ./app
-                run: |
-                    php bin/console doctrine:schema:update -f
+#            -   name: Create DB schema
+#                working-directory: ./app
+#                run: |
+#                    php bin/console doctrine:schema:update -f
 
             -   name: Run migrations
                 working-directory: ./app
                 run: |
-                    php bin/console doctrine:migrations:migrate --env=test --no-interaction
+                    composer require symfony/orm-pack
+                    php bin/console doctrine:schema:update --force || echo "No migrations found or schema update failed"
+                    php bin/console doctrine:migrations:migrate || echo "No migrations found or migration failed"
+                env:
+                    DATABASE_URL: mysql://root:root@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/sf5_test_db
 
             -   name: Run tests
                 working-directory: ./app
