@@ -43,7 +43,7 @@ jobs:
             -   name: Verify MYSQL connection is up
                 run: |
                     sudo apt-get install -y mysql-client
-                    mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports['3306'] }} -uroot -ppassword -e "SHOW DATABASES"
+                    mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports['3306'] }} -uroot -proot -e "SHOW DATABASES"
 
             -   name: Copy ENV Symfony Configuration for CI
                 run: |
