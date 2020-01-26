@@ -14,15 +14,15 @@ jobs:
     build:
         # the name of the image of the virtual machine to be used
         runs-on: ubuntu-latest
-        env:
-            APP_ENV: ${{ APP_ENV }}
-            PHP_VERSION: ${{ PHP_VERSION }}
-            NGINX_VERSION: ${{ NGINX_VERSION }}
-            MYSQL_VERSION: ${{ MYSQL_VERSION }}
-            NGINX_HOST: ${{ NGINX_HOST }}
-            PROJECT_ROOT: ${{ PROJECT_ROOT }}
-            TIMEZONE: ${{ TIMEZONE }}
-            XDEBUG_REMOTE_HOST: ${{ XDEBUG_REMOTE_HOST }}
+#        env:
+#            APP_ENV: ${{ APP_ENV }}
+#            PHP_VERSION: ${{ PHP_VERSION }}
+#            NGINX_VERSION: ${{ NGINX_VERSION }}
+#            MYSQL_VERSION: ${{ MYSQL_VERSION }}
+#            NGINX_HOST: ${{ NGINX_HOST }}
+#            PROJECT_ROOT: ${{ PROJECT_ROOT }}
+#            TIMEZONE: ${{ TIMEZONE }}
+#            XDEBUG_REMOTE_HOST: ${{ XDEBUG_REMOTE_HOST }}
 
         # each job contains a sequence of tasks called steps
         # steps can run commands
