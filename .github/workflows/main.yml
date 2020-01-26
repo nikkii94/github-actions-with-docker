@@ -14,15 +14,24 @@ jobs:
     build:
         # the name of the image of the virtual machine to be used
         runs-on: ubuntu-latest
+        env:
+            APP_ENV: ${{ APP_ENV }}
+            PHP_VERSION: ${{ PHP_VERSION }}
+            NGINX_VERSION: ${{ NGINX_VERSION }}
+            MYSQL_VERSION: ${{ MYSQL_VERSION }}
+            NGINX_HOST: ${{ NGINX_HOST }}
+            PROJECT_ROOT: ${{ PROJECT_ROOT }}
+            TIMEZONE: ${{ TIMEZONE }}
+            XDEBUG_REMOTE_HOST: ${{ XDEBUG_REMOTE_HOST }}
 
         # each job contains a sequence of tasks called steps
         # steps can run commands
         steps:
             -   uses: actions/checkout@v1
 
-#            - name: Copy ENV Symfony Configuration for CI
-#              run: |
-#                php -r "file_exists('.env') || copy('.env.test', '.env');"
+            - name: Copy ENV Symfony Configuration for CI
+              run: |
+                php -r "file_exists('.env') || copy('.env.ci', '.env');"
 
             -   name: Build the docker-compose stack
                 run: docker-compose -f docker-compose.yml up -d
