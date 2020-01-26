@@ -25,23 +25,23 @@ jobs:
 #                php -r "file_exists('.env') || copy('.env.test', '.env');"
 
             - name: Install composer dependencies
-              working-directory: app
+              working-directory: ./app
               run: |
                 composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
 
 
             - name: Generate secret
-              working-directory: app
+              working-directory: ./app
               run: |
                 php bin/console secrets:generate-keys
 
             - name: Run migrations
-              working-directory: app
+              working-directory: ./app
               run: |
                   php bin/console doctrine:migrations:migrate --env=test --no-interaction
 
             - name: Run tests
-              working-directory: app
+              working-directory: ./app
               run: |
                   php bin/phpunit
 
@@ -53,7 +53,7 @@ jobs:
             -   uses: actions/checkout@master
             -   name: Run PHPStan
                 uses: docker://jakzal/phpqa:php7.3-alpine
-                working-directory: app
+#                working-directory: ./app
                 with:
                     args: phpstan analyze
 
@@ -63,7 +63,7 @@ jobs:
         steps:
             -   uses: actions/checkout@master
             -   name: Run PHP-CS-Fixer
-                working-directory: app
+#                working-directory: ./app
                 uses: docker://jakzal/phpqa:php7.3-alpine
                 with:
                     args: php-cs-fixer fix --dry-run --diff-format udiff -vvv
