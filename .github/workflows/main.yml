@@ -122,7 +122,6 @@ jobs:
         steps:
             -   uses: actions/checkout@master
             -   name: Run PHP-CS-Fixer
-                working-directory: ./app
                 uses: docker://jakzal/phpqa:php7.3-alpine
                 with:
                     args: php-cs-fixer fix ./app --dry-run --diff-format udiff -vvv
