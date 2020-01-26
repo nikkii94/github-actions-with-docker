@@ -19,9 +19,9 @@ jobs:
                 image: mysql:5.7
                 env:
                     MYSQL_ROOT_PASSWORD: root
-#                    MYSQL_DATABASE: sf5_test_db
-#                    MYSQL_USER:
-#                    MYSQL_PASSWORD:
+                    MYSQL_DATABASE: sf5_test_db
+                    MYSQL_USER: sf5_test_user
+                    MYSQL_PASSWORD: sf5_test_password
                 ports:
                     - 3306
                 options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -45,7 +45,12 @@ jobs:
                     sudo apt-get install -y mysql-client
                     mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports['3306'] }} -uroot -proot -e "SHOW DATABASES"
 
+            -   name: Copy ENV Configuration for CI
+                run: |
+                    php -r "file_exists('.env') || copy('.env.ci', '.env');"
+
             -   name: Copy ENV Symfony Configuration for CI
+                working-directory: ./app
                 run: |
                     php -r "file_exists('.env') || copy('.env.ci', '.env');"
 
