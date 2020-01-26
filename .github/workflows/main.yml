@@ -1,0 +1,41 @@
+# name of the workflow
+name: CI
+
+# event that trigger the execution of the action (can by multiple
+on:
+    push:
+        branches:
+            - master
+            - features/*
+
+# list of jobs to be executed.
+# jobs by default are executed in parallel
+jobs:
+    build:
+        # the name of the image of the virtual machine to be used
+        runs-on: ubuntu-latest
+
+        # each job contains a sequence of tasks called steps
+        # steps can run commands
+        steps:
+            - uses: actions/checkout@v1
+
+            - name: Copy ENV Symfony Configuration for CI
+              run: |
+                php -r "file_exists('.env') || copy('app/.env.test', '.env');"
+
+            - name: Install composer dependencies
+              run: |
+                composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
+
+            - name: Generate secret
+              run: |
+                php bin/console secrets:generate-keys
+
+            - name: Run migrations
+              run: |
+                  php bin/console doctrine:migrations:migrate --env=test --no-interaction
+
+            - name: Run tests
+              run: |
+                  php bin/phpunit
