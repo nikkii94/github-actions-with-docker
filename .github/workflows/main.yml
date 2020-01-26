@@ -18,32 +18,46 @@ jobs:
         # each job contains a sequence of tasks called steps
         # steps can run commands
         steps:
-            - uses: actions/checkout@v1
+            -   uses: actions/checkout@v1
 
 #            - name: Copy ENV Symfony Configuration for CI
 #              run: |
 #                php -r "file_exists('.env') || copy('.env.test', '.env');"
 
-            - name: Install composer dependencies
-              working-directory: ./app
-              run: |
-                composer install -q --no-ansi --no-interaction --no-suggest --no-progress --prefer-dist
+            -   name: Build the docker-compose stack
+                run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d
 
+            -   name: Check running containers
+                run: docker ps -a
 
-            - name: Generate secret
-              working-directory: ./app
-              run: |
-                php bin/console secrets:generate-keys
+            -   name: Check logs
+                run: docker logs app
 
-            - name: Run migrations
-              working-directory: ./app
-              run: |
-                  php bin/console doctrine:migrations:migrate --env=test --no-interaction
+            -   name: Install composer dependencies
+                working-directory: ./app
+                run: |
+                    composer install -q --no-ansi --no-interaction --no-suggest --prefer-dist
 
-            - name: Run tests
-              working-directory: ./app
-              run: |
-                  php bin/phpunit
+            -   name: Install && build frontend assets
+                working-directory: ./app
+                run: |
+                    yarn install --pure-lockfile
+                    yarn encore production
+
+            -   name: Generate secret
+                working-directory: ./app
+                run: |
+                    php bin/console secrets:generate-keys
+
+            -   name: Run migrations
+                working-directory: ./app
+                run: |
+                    php bin/console doctrine:migrations:migrate --env=test --no-interaction
+
+            -   name: Run tests
+                working-directory: ./app
+                run: |
+                    php bin/phpunit
 
 
 #    phpstan:

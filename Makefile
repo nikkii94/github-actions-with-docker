@@ -1,13 +1,13 @@
 app_container_name=sf5_app
 
 build:
-	@docker-compose build
+	@docker-compose -f docker-compose.yml build
 
 start:
-	@docker-compose up -d
+	@docker-compose -f docker-compose.yml up -d
 
 config:
-	@docker-compose config
+	@docker-compose -f docker-compose.yml config
 
 ssh:
 	@docker exec -it $(app_container_name) bash
