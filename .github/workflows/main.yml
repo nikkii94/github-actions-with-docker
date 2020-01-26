@@ -33,14 +33,14 @@ jobs:
               run: |
                 php -r "file_exists('.env') || copy('.env.ci', '.env');"
 
-            -   name: Build the docker-compose stack
-                run: docker-compose -f docker-compose.yml up -d
-
-            -   name: Check running containers
-                run: docker ps -a
-
-            -   name: Check logs
-                run: docker logs app
+#           -   name: Build the docker-compose stack
+                  ##                run: docker-compose -f docker-compose.yml up -d
+                  ##
+                  ##            -   name: Check running containers
+                  ##                run: docker ps -a
+                  ##
+                  ##            -   name: Check logs
+                ##                run: docker logs app
 
             -   name: Install composer dependencies
                 working-directory: ./app
@@ -57,6 +57,12 @@ jobs:
                 working-directory: ./app
                 run: |
                     php bin/console secrets:generate-keys
+
+            -   name: Create DB schema
+                working-directory: ./app
+                run: |
+                    php bin/console doctrine:database:create
+                    php bin/console doctrine:schema:update -f
 
             -   name: Run migrations
                 working-directory: ./app
