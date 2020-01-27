@@ -1,3 +1,4 @@
 .env
 log/**/*
 .data/**/*
+.github/workflows/static-code-analysis.example.yml
