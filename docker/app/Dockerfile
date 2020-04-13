@@ -64,6 +64,14 @@ ENV COMPOSER_ALLOW_SUPERUSER 1
 # create composer cache directory
 RUN mkdir -p /var/www/.composer && chown -R www-data /var/www/.composer
 
+# Composer parallel install plugin
+#RUN composer global require hirak/prestissimo
+
+# install Symfony Flex globally to speed up download of Composer packages (parallelized prefetching)
+RUN set -eux; \
+	composer global require "symfony/flex" --prefer-dist --no-progress --no-suggest --classmap-authoritative; \
+	composer clear-cache
+
 # Node.js 12 && Yarn install
 RUN apt-get update && \
     apt-get install -y --no-install-recommends gnupg && \
